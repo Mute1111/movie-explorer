@@ -1,93 +1,139 @@
-import { useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY
-const BASE_URL = "https://api.themoviedb.org/3"
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const BASE_URL = "https://api.themoviedb.org/3";
 
 async function fetchSearchResults(query) {
-  if (!query) return [] // no empty search
+  if (!query.trim()) return [];
   const { data } = await axios.get(
     `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(query)}`
-  )
-  return data.results
+  );
+  return data.results || [];
 }
 
+   function Search() {
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
-function Search() {
-  const [query, setQuery] = useState("")
-  
-  const { data: results, refetch, isFetching, isError } = useQuery(
-    ["search", query], // query key
-    () => fetchSearchResults(query),
-    { enabled: false } // don’t fetch automatically, only when we call refetch
-  )
+  // Debounce input changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query.trim());
+    }, 400);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    refetch() // triggers the API call
-  }
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const { data: results = [], isFetching, isError } = useQuery({
+    queryKey: ["search", debouncedQuery],
+    queryFn: () => fetchSearchResults(debouncedQuery),
+    enabled: debouncedQuery.length >= 2,
+    staleTime: 3 * 60 * 1000,    // 3 minutes
+    gcTime: 10 * 60 * 1000,
+  });
+
+  const handleClear = () => setQuery("");
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 text-white">
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <input
-          type="text"
-          placeholder="Search movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 p-2 rounded text-black"
-        />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-300"
-        >
-          Search
-        </button>
-      </form>
-
-      {/* Render search results */}
-{(!results || results.length === 0) ? (
-  <p className="text-gray-400 text-center mt-10">Search for a movie to see results</p>
-) : (
-  <div className="max-h-[700px] overflow-y-auto bg-gray-800 rounded-xl p-3 shadow-xl">
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-      {isFetching && <p>Loading...</p>}
-      {isError && <p className="text-red-500">Failed to fetch results</p>}
-      {results.map(movie => (
-        <Link to={`/movie/${movie.id}`} key={movie.id}>
-          <div className="relative rounded-xl overflow-hidden shadow-lg hover:scale-110 hover:shadow-3xl transition-transform duration-300">
-            <img
-              src={movie.poster_path 
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : '/000000H1.jpg'} // placeholder image path
-              alt={movie.title}
-              className="w-full h-auto object-cover rounded-xl"
+    <div className="max-w-5xl mx-auto mt-10 px-4 text-white">
+      {/* Search bar */}
+      <div className="relative max-w-2xl mx-auto mb-10">
+        <div className="flex gap-3">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              placeholder="Search movies, series..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full p-4 pr-12 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent p-4">
-              <h2 className="text-white font-semibold">{movie.title}</h2>
-              <div className="flex justify-between text-gray-300 mt-1 text-sm sm:text-base">
-                <span>⭐ {movie.vote_average}</span>
-                <span>{movie.release_date?.slice(0, 4)}</span>
-              </div>
-            </div>
-            {/* Optional hover play button */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-              <button className="bg-white bg-opacity-30 hover:bg-opacity-50 rounded-full p-3 text-xl">
-                ▶
+            {query && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-2xl leading-none"
+                aria-label="Clear search"
+              >
+                ×
               </button>
-            </div>
+            )}
           </div>
-        </Link>
-      ))}
-    </div>
-  </div>
-  
-)
-}
-</div>
-  )
-}
+        </div>
+      </div>
 
+      {/* Feedback / status messages */}
+      <div className="text-center my-8 min-h-[3rem]">
+        {debouncedQuery.length === 0 && (
+          <p className="text-gray-400 text-lg">Start typing to find movies ✨</p>
+        )}
+
+        {debouncedQuery.length > 0 && debouncedQuery.length < 2 && (
+          <p className="text-gray-500">Keep typing... at least 2 characters</p>
+        )}
+
+        {isFetching && (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-blue-500 border-opacity-70"></div>
+          </div>
+        )}
+
+        {!isFetching && debouncedQuery.length >= 2 && results.length === 0 && (
+          <p className="text-gray-300 text-xl">
+            No results found for{" "}
+            <span className="font-medium text-white">"{debouncedQuery}"</span> 😔
+          </p>
+        )}
+
+        {isError && (
+          <p className="text-red-400 text-lg">
+            Oops... something went wrong. Try again?
+          </p>
+        )}
+      </div>
+
+      {/* Results grid */}
+      {results.length > 0 && !isFetching && (
+        <div className="bg-gray-900/50 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 md:gap-6">
+            {results.map((movie) => (
+              <Link
+                to={`/movie/${movie.id}`}
+                key={movie.id}
+                className="group block rounded-xl overflow-hidden bg-gray-800 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="relative aspect-[2/3] bg-gray-950">
+                  <img
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                        : "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=500&auto=format&fit=crop&q=60"
+                    }
+                    alt={movie.title || "Movie poster"}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="text-white text-6xl opacity-70 drop-shadow-lg">▶</span>
+                  </div>
+                </div>
+                <div className="p-3">
+                  <h3 className="font-semibold text-base md:text-lg line-clamp-2 group-hover:text-blue-400 transition-colors">
+                    {movie.title}
+                  </h3>
+                  <div className="mt-1.5 text-sm text-gray-400 flex items-center justify-between">
+                    <span>⭐ {movie.vote_average ? movie.vote_average.toFixed(1) : "—"}</span>
+                    <span>{movie.release_date?.slice(0, 4) || "—"}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 export default Search

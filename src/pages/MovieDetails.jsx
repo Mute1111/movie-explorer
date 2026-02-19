@@ -13,13 +13,43 @@ async function fetchMovieDetails(id) {
 function MovieDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data: movie, isLoading, isError } = useQuery(["movie", id], () => fetchMovieDetails(id))
+  const { data: movie, isLoading, isError, error } = useQuery(["movie", id], () => fetchMovieDetails(id)) 
 
-  if (isLoading) return <div className="text-center mt-10 text-white">Loading...</div>
-  if (isError) return <div className="text-center mt-10 text-red-500">Failed to load movie details</div>
 
+  if (isLoading) {
   return (
-    <div className="max-w-5xl mx-auto mt-10 text-white bg-gray-900 p-6 rounded-xl shadow-xl">
+    <div className="text-center mt-16 text-xl text-gray-300">
+      Loading movie details...
+    </div>
+  );
+}
+  if (isError){
+    console.error("failed to load Movie:" ,error);
+   return (
+    <div className="max-w-5xl mx-auto mt-10 text-white bg-gray-800 p-8 rounded-xl text-center">
+      <h2 className="text-3xl font-bold mb-4 text-red-400">Error</h2>
+      <p className="text-xl mb-6">{errorMessage}</p>
+
+      <div className="flex justify-center gap-4">
+        <button
+          className="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg"
+          onClick={() => navigate(-1)}
+        >
+          ← Go Back
+        </button>
+        <button
+          className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg"
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+  );
+
+  }
+  return (
+    <div className="max-w-5xl mx-auto mt-10 text-white bg-gray-800 p-6 rounded-xl shadow-xl">
       <button
         className="mb-6 px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
         onClick={() => navigate(-1)}
@@ -45,6 +75,7 @@ function MovieDetails() {
           <p className="text-gray-400 mb-1"><strong>Language:</strong> {movie.original_language.toUpperCase()}</p>
         </div>
       </div>
+      
     </div>
   )
 }

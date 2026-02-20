@@ -30,7 +30,7 @@ async function fetchSearchResults(query) {
   const { data: results = [], isFetching, isError } = useQuery({
     queryKey: ["search", debouncedQuery],
     queryFn: () => fetchSearchResults(debouncedQuery),
-    enabled: debouncedQuery.length >= 2,
+    enabled: debouncedQuery.length >= 1,
     staleTime: 3 * 60 * 1000,    // 3 minutes
     gcTime: 10 * 60 * 1000,
   });

@@ -31,7 +31,7 @@ export default function HeroSlider() {
   if (!movies.length) return null;
 
   return (
-    <div className="relative h-[75vh] w-full overflow-hidden">
+    <div className="relative h-[75vh] w-full overflow-hidden pt-20 p-4">
       
       {/* Background */}
       <div className="absolute inset-0">

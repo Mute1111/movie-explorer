@@ -2,15 +2,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import MovieDetails from "./pages/MovieDetails";
 import Footer from "./components/Footer"
+import Header from "./components/Header"
 
 function App() {
   return (
+
+
     <BrowserRouter>
+    <Header />
+    <main className = "min-h-screen">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />    
         <Route path="/movie/:id" element={<MovieDetails />} />
-        <Route path="/components/Footer" elment = {<Footer />}/>
+       
+        
       </Routes>
+      </main>
+    <Footer />
     </BrowserRouter>
   );
 }

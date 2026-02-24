@@ -33,7 +33,7 @@ export default function TrendingMovies() {
   });
 
   if (isLoading) {
-    return <div className="text-center mt-10 text-white text-xl">Loading trending movies...</div>;
+    return <div className="text-center mt-10 text-text text-xl">Loading trending movies...</div>;
   }
 
   if (isError) {
@@ -50,7 +50,7 @@ export default function TrendingMovies() {
 
   return (
     <div className="mt-10 px-4 md:px-8">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Trending This Week</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-text mb-6">Trending This Week</h2>
 
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
@@ -89,7 +89,7 @@ export default function TrendingMovies() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/60">
-                <h3 className="text-white font-semibold text-base md:text-lg line-clamp-2 group-hover:text-blue-300 transition-colors">
+                <h3 className="text-text font-semibold text-base md:text-lg line-clamp-2 group-hover:text-gray-300 transition-colors">
                   {movie.title}
                 </h3>
                 <div className="mt-1 flex justify-between text-sm text-gray-300">
@@ -100,7 +100,7 @@ export default function TrendingMovies() {
 
               {/* Play icon on hover */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="bg-white/30 hover:bg-white/50 rounded-full p-4 text-3xl text-white shadow-lg">
+                <div className="bg-bg/30 hover:bg-bg/50 rounded-full p-4 text-3xl text-text shadow-lg">
                   ▶
                 </div>
               </div>

@@ -2,12 +2,12 @@ import { Link } from "react-router-dom"
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400 mt-16 border-t border-gray-800">
+    <footer className="bg-bg text-gray-400 mt-16 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
         
         {/* Brand */}
         <div>
-          <h2 className="text-xl font-bold text-white mb-3">
+          <h2 className="text-xl font-bold text-text mb-3">
             Movie Explorer
           </h2>
           <p className="text-sm">
@@ -17,7 +17,7 @@ export default function Footer() {
 
         {/* Navigation */}
         <div>
-          <h3 className="text-white font-semibold mb-3">Navigation</h3>
+          <h3 className="text-text font-semibold mb-3">Navigation</h3>
           <ul className="space-y-2 text-sm">
             <li><Link to="/" className="hover:text-white">Home</Link></li>
             <li><Link to="/" className="hover:text-white">Trending</Link></li>
@@ -26,7 +26,7 @@ export default function Footer() {
 
         {/* Credits */}
         <div>
-          <h3 className="text-white font-semibold mb-3">Data Source</h3>
+          <h3 className="text-text font-semibold mb-3">Data Source</h3>
           <p className="text-sm">
             Powered by TMDB API.
           </p>

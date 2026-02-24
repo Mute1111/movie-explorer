@@ -1,11 +1,19 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}" // Make sure Tailwind scans all JS/JSX files
-  ],
-  theme: {
-    extend: {},
+// tailwind.config.js
+/** @type {import('tailwindcss').config}*/
+export default{
+content:[
+  "./index.html",
+  "./src/**/*.{js,ts,jsx,tsx}",
+],
+theme: {
+  extend: {
+    colors: {
+      bg: "rgb(var(--bg) / <alpha-value>)",
+      card: "rgb(var(--card) / <alpha-value>)",
+      text: "rgb(var(--text) / <alpha-value>)",
+      accent: "rgb(var(--accent) / <alpha-value>)", 
+    },
   },
-  plugins: [],
+},
+plugins: []
 }

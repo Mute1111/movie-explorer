@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Footer from "../components/Footer";
 import SimilarMovies from "../components/SimilarMovies";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Autoplay } from "swiper/modules";
@@ -31,7 +30,7 @@ function MovieDetails() {
 
   if (isError) {
     return (
-      <div className="max-w-5xl mx-auto mt-10 text-white bg-gray-800 p-8 rounded-xl text-center">
+      <div className="max-w-5xl mx-auto  text-text bg-bg p-8 rounded-xl text-center">
         <h2 className="text-3xl font-bold mb-4 text-red-400">Error</h2>
         <p className="text-xl mb-6">{error?.message || "Something went wrong."}</p>
 
@@ -58,13 +57,11 @@ function MovieDetails() {
   );
 
   return (
-   <div className="max-w-5xl mx-auto mt-10 text-white bg-gray-800 p-6 rounded-xl shadow-xl">
-  <button
-    className="mb-6 px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
-    onClick={() => navigate(-1)}
-  >
-    ← Back
-  </button>
+<>
+
+  
+   <div className="max-w-5xl mx-auto placeholder-teal-200 text-text bg-bg p-6 rounded-xl shadow-xl">
+ 
 
   {/* Poster + Info */}
   <div className="flex flex-col md:flex-row gap-6">
@@ -82,13 +79,13 @@ function MovieDetails() {
 
     {/* Info */}
     <div className="flex-1 flex flex-col">
-      <h1 className="text-3xl md:text-4xl font-bold mb-2">{movie.title}</h1>
+      <h1 className="text-textc text-3xl md:text-4xl font-bold mb-2">{movie.title}</h1>
       <p className="text-gray-300 mb-2">{movie.release_date}</p>
       <p className="mb-4">{movie.overview}</p>
 
       <div className="flex flex-wrap gap-2 mb-4">
         {movie.genres.map((g) => (
-          <span key={g.id} className="px-3 py-1 bg-gray-700 rounded-full text-sm">{g.name}</span>
+          <span key={g.id} className="px-3 py-1 bg-bg rounded-full text-sm">{g.name}</span>
         ))}
       </div>
 
@@ -138,8 +135,9 @@ function MovieDetails() {
   )}
 
   <SimilarMovies movieId={id} />
-  <Footer />
+ 
 </div>
+</>
   );
 }
 

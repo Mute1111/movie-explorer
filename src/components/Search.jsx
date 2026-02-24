@@ -38,7 +38,7 @@ async function fetchSearchResults(query) {
   const handleClear = () => setQuery("");
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 px-4 text-white">
+    <div className="max-w-5xl mx-auto mt-10 px-4 text-text">
       {/* Search bar */}
       <div className="relative max-w-2xl mx-auto mb-10">
         <div className="flex gap-3">
@@ -48,13 +48,13 @@ async function fetchSearchResults(query) {
               placeholder="Search movies, series..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full p-4 pr-12 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              className="w-full p-4 pr-12 rounded-xl bg-bg border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
             />
             {query && (
               <button
                 type="button"
                 onClick={handleClear}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-2xl leading-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-text hover:text-white text-2xl leading-none"
                 aria-label="Clear search"
               >
                 ×
@@ -67,11 +67,11 @@ async function fetchSearchResults(query) {
       {/* Feedback / status messages */}
       <div className="text-center my-8 min-h-[3rem]">
         {debouncedQuery.length === 0 && (
-          <p className="text-gray-400 text-lg">Start typing to find movies ✨</p>
+          <p className="text-text text-lg">Start typing to find movies ✨</p>
         )}
 
         {debouncedQuery.length > 0 && debouncedQuery.length < 2 && (
-          <p className="text-gray-500">Keep typing... at least 2 characters</p>
+          <p className="text-text">Keep typing... at least 2 characters</p>
         )}
 
         {isFetching && (
@@ -96,15 +96,15 @@ async function fetchSearchResults(query) {
 
       {/* Results grid */}
       {results.length > 0 && !isFetching && (
-        <div className="bg-gray-900/50 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
+        <div className="bg-bg/50 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 md:gap-6">
             {results.map((movie) => (
               <Link
                 to={`/movie/${movie.id}`}
                 key={movie.id}
-                className="group block rounded-xl overflow-hidden bg-gray-800 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                className="group block rounded-xl overflow-hidden bg-bg shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="relative aspect-[2/3] bg-gray-950">
+                <div className="relative aspect-[2/3] bg-bg">
                   <img
                     src={
                       movie.poster_path
@@ -116,14 +116,14 @@ async function fetchSearchResults(query) {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-white text-6xl opacity-70 drop-shadow-lg">▶</span>
+                    <span className="text-text text-6xl opacity-70 drop-shadow-lg">▶</span>
                   </div>
                 </div>
                 <div className="p-3">
                   <h3 className="font-semibold text-base md:text-lg line-clamp-2 group-hover:text-blue-400 transition-colors">
                     {movie.title}
                   </h3>
-                  <div className="mt-1.5 text-sm text-gray-400 flex items-center justify-between">
+                  <div className="mt-1.5 text-sm text-text flex items-center justify-between">
                     <span>⭐ {movie.vote_average ? movie.vote_average.toFixed(1) : "—"}</span>
                     <span>{movie.release_date?.slice(0, 4) || "—"}</span>
                   </div>

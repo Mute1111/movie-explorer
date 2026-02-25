@@ -1,8 +1,8 @@
 :root {
-   --bg: 20 14 39; /* page background */ 
-   --card: 31 41 55; /* card / container */ 
-   --text: 255 255 255; /* main text */ 
-   --accent: 0 0 0; /* highlight color */ 
+--bg: 255 255 255;
+  --card: 248 250 252;
+  --text: 0 0 0;
+  --accent: 56 189 248;
   } /* Optional dark mode */ 
   .dark { 
     --bg: 10 10 10;
@@ -17,7 +17,7 @@
 
 /* Optional: custom body background */
 body {
-  @apply bg-bg text-white;
+  @apply bg-bg text-text;
 }
 /* Add to index.css for nicer hover effect */
 .hover-glow:hover {
